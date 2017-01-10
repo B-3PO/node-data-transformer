@@ -71,12 +71,18 @@ var menuStruct = transformer.defineStruct({
   })
 });
 
-menuStruct.get([1], function (error, data) {
+menuStruct.get([], function (error, data) {
   // console.log(data);
   console.log('Done');
   process.exit(0);
 });
 
+
+// menuStruct.menuItems.get([], function (error, data) {
+//   // console.log(data);
+//   console.log('Done');
+//   process.exit(0);
+// });
 
 // var menuRouter = transformer.routes(struct);
 // var menuItemsRouter = transformer.Routes(struct.menuItems);

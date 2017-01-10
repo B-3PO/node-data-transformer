@@ -7,15 +7,22 @@
     "test": "mocha"
   },
   "dependencies": {
-    "mysql": "^2.12.0"
+    "console-stamp": "^0.2.4",
+    "mysql": "^2.12.0",
+    "s3fs": "^2.5.0"
   },
   "devDependencies": {
     "body-parser": "^1.15.0",
     "chai": "^3.5.0",
     "cookie-parser": "^1.4.1",
     "gulp": "^3.9.1",
+    "gulp-istanbul": "^1.1.1",
+    "gulp-mocha": "^3.0.1",
     "gulp-nodemon": "^2.0.7",
     "mocha": "^2.4.5",
-    "node-mocks-http": "^1.5.2"
+    "node-mocks-http": "^1.5.2",
+    "rewire": "^2.5.2",
+    "sinon": "^1.17.7",
+    "sinon-chai": "^2.8.0"
   }
 }
