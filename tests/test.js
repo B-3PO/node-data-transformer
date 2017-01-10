@@ -72,6 +72,10 @@ var menuStruct = transformer.defineStruct({
 });
 
 menuStruct.get([], function (error, data) {
+  // console.log(data.data.length);
+  // console.log(data.included.length);
+  // console.log(data.data[0].relationships.menuItems);
+  // console.log(data.included);
   // console.log(data);
   console.log('Done');
   process.exit(0);
