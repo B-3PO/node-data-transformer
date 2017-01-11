@@ -15,7 +15,8 @@ transformer.defineResource('locations', {
   fields: {
     id: {dataType: transformer.ID},
     name: {dataTpe: transformer.STRING},
-    description: {dataTpe: transformer.STRING}
+    description: {dataTpe: transformer.STRING},
+    venue_id: {dataType: transformer.INT}
   },
 
   relationships: [
@@ -88,7 +89,27 @@ transformer.defineResource('items', {
   },
 
   relationships: [
-    'menu_items.item_id'
+    'menu_items.item_id',
+    'item_variants.item_id'
+  ]
+});
+
+
+transformer.defineResource('item_variants', {
+  table: 'item_variants',
+  fields: {
+    id: {dataType: transformer.ID},
+    item_id: {dataTpe: transformer.INT},
+    default_variant: {dataTpe: transformer.STRING},
+    name: {dataType: transformer.STRING},
+    price_cents: {dataType: transformer.INT}
+  },
+
+  relationships: [
+    {
+      resource: 'items.id',
+      field: 'item_id'
+    }
   ]
 });
 
@@ -107,7 +128,7 @@ var menuStruct = transformer.defineStruct({
 
 var locationStruct = transformer.defineStruct({
   id: 'locations.id',
-  name: 'locations.name',
+  location_name: 'locations.name',
 
   menus: transformer.defineStruct({
     id: 'menus.id',
@@ -117,32 +138,39 @@ var locationStruct = transformer.defineStruct({
       id: 'menu_items.id',
       name: 'items.name',
       base_price: 'items.base_price',
-      price: 'menu_items.price'
+      price: 'menu_items.price',
+
+      variants_2: transformer.defineStruct({
+        id: 'item_variants.id',
+        name: 'item_variants.name'
+      })
     })
   })
 });
 
-locationStruct.get([41], function () {
-  console.log('done');
+var start = clock();
+locationStruct.get([319, 320, 356, 369], function (error, data) {
+  var duration = clock(start);
+  console.log("Total Time "+duration+"ms");
+  console.log(data.data[0]);
   process.exit(0);
 });
 
-// menuStruct.get([], function (error, data) {
-//   // console.log(data.data.length);
-//   // console.log(data.included.length);
-//   // console.log(data.data[0].relationships.menuItems);
-//   // console.log(data.included);
-//   // console.log(data);
-//   console.log('Done');
+// var start = clock();
+// locationStruct.menus.menuItems.get([], function (error, data) {
+//   var duration = clock(start);
+//   console.log("Total Time "+duration+"ms");
+//   console.log(data.data[0]);
 //   process.exit(0);
 // });
 
+function clock(start) {
+    if ( !start ) return process.hrtime();
+    var end = process.hrtime(start);
+    return Math.round((end[0]*1000) + (end[1]/1000000));
+}
 
-// menuStruct.menuItems.get([], function (error, data) {
-//   // console.log(data);
-//   console.log('Done');
-//   process.exit(0);
-// });
+
 
 // var menuRouter = transformer.routes(struct);
 // var menuItemsRouter = transformer.Routes(struct.menuItems);
