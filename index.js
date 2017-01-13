@@ -1,6 +1,7 @@
 var resourceManager = require('./lib/resource-manager');
 var structManager = require('./lib/struct-manager');
 var database = require('./lib/database');
+var dataGetter = require('./lib/data-getter');
 
 
 /**
@@ -13,6 +14,7 @@ module.exports = {
   defineResource: resourceManager.define,
   defineStruct: structManager.define,
   addDatabase: addDatabase,
+  setFormatter: dataGetter.setFormatter,
 
   // data types
   STRING: 'string',
@@ -20,7 +22,9 @@ module.exports = {
   INT: 'int',
   ID: 'id',
   UUID: 'uuid',
-  BOOLEAN: 'boolean'
+  BOOLEAN: 'boolean',
+  JSON: 'json',
+  JSON_API: 'jsonapi'
 };
 
 

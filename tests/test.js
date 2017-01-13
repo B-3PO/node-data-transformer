@@ -6,6 +6,7 @@ transformer.addDatabase({
   connectionLimit: 10,
   default: true
 });
+transformer.setFormatter('json');
 
 
 // --- resources ---
