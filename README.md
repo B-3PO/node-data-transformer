@@ -1,3 +1,4 @@
+** This project is in beta**
 # node-sql-transformer
 A module to transform data form sql into json or json-api
 The purpose of the module is to make trandforming into multiple json structores bioth easy and performant.
