@@ -11,7 +11,6 @@ transformer.addDatabase({
 // --- resources ---
 
 transformer.defineResource('locations', {
-  table: 'locations',
   fields: {
     id: {dataType: transformer.ID},
     name: {dataTpe: transformer.STRING},
@@ -25,7 +24,6 @@ transformer.defineResource('locations', {
 });
 
 transformer.defineResource('location_menus', {
-  table: 'location_menus',
   fields: {
     id: {dataType: transformer.ID},
     location_id: {dataType: transformer.INT},
@@ -45,7 +43,6 @@ transformer.defineResource('location_menus', {
 });
 
 transformer.defineResource('menus', {
-  table: 'menus',
   fields: {
     id: {dataType: transformer.ID},
     name: {dataTpe: transformer.STRING}
@@ -59,7 +56,6 @@ transformer.defineResource('menus', {
 
 
 transformer.defineResource('menu_items', {
-  table: 'menu_items',
   fields: {
     id: {dataType: transformer.ID},
     item_id: {dataType: transformer.INT},
@@ -81,7 +77,6 @@ transformer.defineResource('menu_items', {
 });
 
 transformer.defineResource('items', {
-  table: 'items',
   fields: {
     id: {dataType: transformer.ID},
     name: {dataTpe: transformer.STRING},
@@ -96,7 +91,6 @@ transformer.defineResource('items', {
 
 
 transformer.defineResource('item_variants', {
-  table: 'item_variants',
   fields: {
     id: {dataType: transformer.ID},
     item_id: {dataTpe: transformer.INT},
@@ -140,7 +134,7 @@ var locationStruct = transformer.defineStruct({
       base_price: 'items.base_price',
       price: 'menu_items.price',
 
-      variants_2: transformer.defineStruct({
+      variants: transformer.defineStruct({
         id: 'item_variants.id',
         name: 'item_variants.name'
       })
@@ -149,10 +143,11 @@ var locationStruct = transformer.defineStruct({
 });
 
 var start = clock();
-locationStruct.get([319, 320, 356, 369], function (error, data) {
+locationStruct.get([41], function (error, data) {
   var duration = clock(start);
   console.log("Total Time "+duration+"ms");
-  console.log(data.data[0]);
+  // console.log(data.data[0]);
+  console.log(data[0]);
   process.exit(0);
 });
 
