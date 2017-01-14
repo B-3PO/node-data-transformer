@@ -5,12 +5,12 @@ The purpose of the module is to make trandforming into multiple json structores 
 
 # Roadmap
 - Allow for transforemr to comunicate with multiple types of sql
- - mysql
+ - mysql: current defualt
  - Athena
  
 - Allow for transformer to output to multiple formats
- - json
- - json-api
+ - json: available
+ - json-api: available
  - csv
 
 - Add ability for custom transformation on the field level
