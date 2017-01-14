@@ -78,6 +78,82 @@ transformer.defineResource('menu_items', {
 });
 
 
+transformer.defineResource('item_variants', {
+  fields: {
+    id: {dataType: transformer.ID}
+  },
+
+  relationships: [
+    {
+      resource: 'items.id',
+      field: 'item_id'
+    },
+    {
+      resource: 'addon_groups_items.item_variant_id'
+    }
+  ]
+});
+
+
+transformer.defineResource('addon_groups_items', {
+  fields: {
+    id: {dataType: transformer.ID},
+    name: {dataTpe: transformer.STRING}
+  },
+
+  relationships: [
+    {
+      resource: 'addon_groups.id',
+      field: 'addon_group_id'
+    },
+    {
+      resource: 'item_variants.id',
+      field: 'item_variant_id'
+    }
+  ]
+});
+
+
+transformer.defineResource('addon_groups', {
+  fields: {
+    id: {dataType: transformer.ID}
+  },
+
+  relationships: [
+    'addon_groups_addons.addon_group_id'
+  ]
+});
+
+
+transformer.defineResource('addon_groups_addons', {
+  fields: {
+    id: {dataType: transformer.ID}
+  },
+
+  relationships: [
+    {
+      resource: 'addon_groups.id',
+      field: 'addon_group_id'
+    },
+    {
+      resource: 'addons.id',
+      field: 'addon_id'
+    }
+  ]
+});
+
+transformer.defineResource('addons', {
+  fields: {
+    id: {dataType: transformer.ID},
+    name: {dataTpe: transformer.STRING}
+  },
+
+  relationships: [
+    'addon_groups_addons.addon_id'
+  ]
+});
+
+
 
 
 
@@ -99,7 +175,17 @@ var menuStruct = transformer.defineStruct({
       category_id: 'items.category_id',
       description: 'items.description',
       name: 'items.name',
-      price: 'menu_items.price'
+      price: 'menu_items.price',
+
+      modefiers: transformer.defineStruct({
+        id: 'addon_groups.id',
+        name: 'addon_groups_items.name',
+
+        options: transformer.defineStruct({
+          id: 'addons.id',
+          name: 'addons.name'
+        })
+      })
     })
   })
 });
@@ -111,7 +197,8 @@ var start = clock();
 menuStruct.get([41], function (error, data) {
   var duration = clock(start);
   console.log("Total Time "+duration+"ms");
-  console.log(data[0])
+  console.log(data[0].categories[1].items[0])
+  console.log(data[0].categories[1].items[0].modefiers[0])
   process.exit(0);
 });
 
