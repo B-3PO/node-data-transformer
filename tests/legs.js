@@ -8,6 +8,38 @@ transformer.addDatabase({
 });
 
 
+transformer.defineResource('locations', {
+  fields: {
+    id: {dataType: transformer.ID},
+    name: {dataTpe: transformer.STRING},
+    description: {dataTpe: transformer.STRING},
+    venue_id: {dataType: transformer.INT}
+  },
+
+  relationships: [
+    'location_menus.location_id'
+  ]
+});
+
+transformer.defineResource('location_menus', {
+  fields: {
+    id: {dataType: transformer.ID},
+    location_id: {dataType: transformer.INT},
+    menu_id: {dataType: transformer.INT}
+  },
+
+  relationships: [
+    {
+      resource: 'locations.id',
+      field: 'location_id' // this is assum,ed to be id if not defined
+    },
+    {
+      resource: 'menus.id',
+      field: 'menu_id' // this is assum,ed to be id if not defined
+    }
+  ]
+});
+
 transformer.defineResource('menus', {
   fields: {
     id: {dataType: transformer.ID},
@@ -15,7 +47,8 @@ transformer.defineResource('menus', {
   },
 
   relationships: [
-    'menu_items.menu_id'
+    'menu_items.menu_id',
+    'location_menus.menu_id'
   ]
 });
 
@@ -51,6 +84,7 @@ transformer.defineResource('items', {
       resource: 'categories.id',
       field: 'category_id'
     },
+    // 'item_variants.item_id',
     'menu_items.item_id'
   ]
 });
@@ -157,48 +191,52 @@ transformer.defineResource('addons', {
 
 
 
+var locationStruct = transformer.defineStruct({
+  id: 'locations.id',
+  name: 'locations.name',
 
-var menuStruct = transformer.defineStruct({
-  id: 'menus.id',
-  name: 'menus.name',
+  menus: transformer.defineStruct({
+    id: 'menus.id',
+    name: 'menus.name',
 
-  categories: transformer.defineStruct({
-    id: 'categories.id',
-    alcohol: 'categories.alcohol',
-    limit: 'categories.limit',
-    name: 'categories.name',
+    categories: transformer.defineStruct({
+      id: 'categories.id',
+      alcohol: 'categories.alcohol',
+      limit: 'categories.limit',
+      name: 'categories.name',
 
-    items: transformer.defineStruct({
-      id: 'menu_items.id',
-      alcohol: 'items.alcohol',
-      base_price: 'items.base_price',
-      category_id: 'items.category_id',
-      description: 'items.description',
-      name: 'items.name',
-      price: 'menu_items.price',
+      items: transformer.defineStruct({
+        id: 'menu_items.id',
+        alcohol: 'items.alcohol',
+        base_price: 'items.base_price',
+        description: 'items.description',
+        name: 'items.name',
+        price: 'menu_items.price',
 
-      modefiers: transformer.defineStruct({
-        id: 'addon_groups.id',
-        name: 'addon_groups_items.name',
+        modefiers: transformer.defineStruct({
+          id: 'addon_groups.id',
+          name: 'addon_groups_items.name',
 
-        options: transformer.defineStruct({
-          id: 'addons.id',
-          name: 'addons.name'
+          options: transformer.defineStruct({
+            id: 'addons.id',
+            name: 'addons.name'
+          })
         })
       })
     })
   })
-});
+})
 
 
 
 transformer.setFormatter(transformer.JSON);
 var start = clock();
-menuStruct.get([41], function (error, data) {
+locationStruct.get([320], function (error, data) {
   var duration = clock(start);
   console.log("Total Time "+duration+"ms");
-  console.log(data[0].categories[1].items[0])
-  console.log(data[0].categories[1].items[0].modefiers[0])
+  // console.log(JSON.stringify(data, null, 2));
+  // console.log(data[0].menus[0])
+  // console.log(data[0].categories[1].items[0].modefiers[0])
   process.exit(0);
 });
 
