@@ -21,7 +21,7 @@ gulp.task('test', ['test-coverage'], function() {
 
 gulp.task('test-coverage', function() {
   process.env.NODE_ENV = 'test';
-  return gulp.src('lib/**/*.js')
+  return gulp.src(['!./lib/debog/*.js', 'lib/**/*.js'])
     .pipe(istanbul())
     .pipe(istanbul.hookRequire());
 });
