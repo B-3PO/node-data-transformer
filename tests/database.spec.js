@@ -10,11 +10,15 @@ describe('resource-manger', function () {
   var databaseManager;
   var mysql = require('mysql');
   var mysqlmock;
+  var revertDatabaseManager;
 
   beforeEach(function () {
     databaseManager = rewire('../lib/database');
     mysqlmock = sinon.mock(mysql);
-    databaseManager.__set__('mysql', mysql);
+    revertDatabaseManager = databaseManager.__set__('mysql', mysql);
+  });
+  afterEach(function () {
+    revertDatabaseManager();
   });
 
   describe('add', function () {

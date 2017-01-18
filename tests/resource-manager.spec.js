@@ -114,7 +114,7 @@ describe('resource-manger', function () {
       stubbedConsoleError.restore();
     });
 
-    it('should log error if no resource was found', function () {
+    it('should return resource obj', function () {
       resourceManager.define('one', {
         table: 'tableone',
         fields: {
