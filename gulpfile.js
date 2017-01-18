@@ -9,7 +9,7 @@ gulp.task('test', ['test-coverage'], function() {
     .pipe(mocha({ reporter: 'progress' }))
     .pipe(istanbul.writeReports({
       dir: './coverage/main',
-      reporters: ['json', 'html']
+      reporters: ['json', 'html', 'text-summary']
     }))
     .on('error', function(error) {
       console.log(error);
