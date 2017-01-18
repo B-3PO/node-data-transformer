@@ -1,5 +1,5 @@
 {
-  "name": "node-mysql-jsonapi-transformer",
+  "name": "node-data-transformer",
   "version": "0.0.0",
   "license": "MIT",
   "main": "index.js",
