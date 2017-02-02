@@ -225,23 +225,59 @@ var locationStruct = transformer.defineStruct({
       })
     })
   })
-})
-
-
-
-transformer.setFormatter(transformer.JSON);
-var start = clock();
-locationStruct.get([320], function (error, data) {
-  var duration = clock(start);
-  console.log("Total Time "+duration+"ms");
-  // console.log(JSON.stringify(data, null, 2));
-  // console.log(data[0].menus[0])
-  // console.log(data[0].categories[1].items[0].modefiers[0])
-  process.exit(0);
 });
 
+
+
+var start = clock();
+// locationStruct.get([320], function (error, data) {
+//   var duration = clock(start);
+//   // console.log("Total Time "+duration+"ms");
+//   // console.log(JSON.stringify(data, null, 2));
+//   // console.log(data[0].menus[0])
+//   // console.log(data[0].categories[1].items[0].modefiers[0])
+//   process.exit(0);
+// });
+
+// console.log(locationStruct.get(320, function (data) {
+//   console.log('end 1', data);
+// }).jsonapi());
+// return;
+locationStruct
+  .get([320, 1], function (data) {
+    // console.log('root', data.data);
+  })
+  .menus([100, 264], function (data) {
+    console.log('menus:', data.data);
+  })
+  .categories(function (data) {
+    // console.log('categories:', data);
+  })
+  .toJSONAPI();
+//   .items(function (data) {
+//     console.log('end 4', data);
+//   })
+//   .jsonapi()
+// );
+
+// console.log(locationStruct.get(320, function (data) {
+//   console.log('end 1', data.length);
+// }).menus(function (data) {
+//   console.log('end 2', data.length);
+// }));
+
+// console.log(locationStruct.test()(function (data) {
+//   console.log(data);
+//   console.log('one');
+//   console.log('------');
+//   console.log('');
+//
+//   // var duration = clock(start);
+//   // console.log("Total Time "+duration+"ms");
+// }));
+
 function clock(start) {
-    if ( !start ) return process.hrtime();
-    var end = process.hrtime(start);
-    return Math.round((end[0]*1000) + (end[1]/1000000));
+  if ( !start ) return process.hrtime();
+  var end = process.hrtime(start);
+  return Math.round((end[0]*1000) + (end[1]/1000000));
 }
