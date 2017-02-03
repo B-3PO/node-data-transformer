@@ -9,7 +9,7 @@ gulp.task('test', ['test-coverage'], function() {
     .pipe(mocha({ reporter: 'progress' }))
     .pipe(istanbul.writeReports({
       dir: './coverage/main',
-      reporters: ['json', 'html']
+      reporters: ['json', 'html', 'text-summary']
     }))
     .on('error', function(error) {
       console.log(error);
@@ -21,7 +21,7 @@ gulp.task('test', ['test-coverage'], function() {
 
 gulp.task('test-coverage', function() {
   process.env.NODE_ENV = 'test';
-  return gulp.src('lib/**/*.js')
+  return gulp.src(['!./lib/debog/*.js', 'lib/**/*.js'])
     .pipe(istanbul())
     .pipe(istanbul.hookRequire());
 });

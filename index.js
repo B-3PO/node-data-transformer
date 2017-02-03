@@ -1,7 +1,8 @@
+'use strict';
+
 var resourceManager = require('./lib/resource-manager');
 var structManager = require('./lib/struct-manager');
 var database = require('./lib/database');
-var dataGetter = require('./lib/data-getter');
 
 
 /**
@@ -14,7 +15,6 @@ module.exports = {
   defineResource: resourceManager.define,
   defineStruct: structManager.define,
   addDatabase: addDatabase,
-  setFormatter: dataGetter.setFormatter,
 
   // data types
   STRING: 'string',
