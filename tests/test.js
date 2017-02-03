@@ -234,10 +234,15 @@ var start = clock();
 
 locationStruct
   .get([320, 1])
-  .menus([100, 264])
-  // .regroup()
   .toJSONAPI(function (data) {
-    console.log(data.data);
+    console.log(data.data[0].relationships);
+  })
+  .menus([100, 264], function (data) {
+    // console.log(data.data)
+  })
+  // .menus()
+  .toJSONAPI(function (data) {
+    console.log(data.data[0].relationships);
   });
 
 // locationStruct
