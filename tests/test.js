@@ -231,18 +231,29 @@ var locationStruct = transformer.defineStruct({
 
 var start = clock();
 
-
 locationStruct
   .get([320, 1])
-  .toJSONAPI(function (data) {
-    console.log(data.data[0].relationships);
+  .filter(function (data) {
+    return true;
   })
-  .menus([100, 264], function (data) {
-    // console.log(data.data)
+  .toJSONAPI(function (data) {
+    console.log(data.data[0].relationships.menus);
+  })
+  // .menus([100, 264], function (data) {
+  //   // console.log(data.data)
+  // })
+  .menus()
+  .filter({
+    id: function (value) {
+      return value === 264 || value === 100;
+    }
   })
   // .menus()
+  // .filter(function (data) {
+  //   return true;
+  // })
   .toJSONAPI(function (data) {
-    console.log(data.data[0].relationships);
+    console.log(data.data[0].relationships.menus);
   });
 
 // locationStruct
