@@ -250,7 +250,7 @@ locationStruct
   .menus([100, 264], function (data) {
     console.log('menus:', data.data);
   })
-  .categories(function (data) {
+  .categories([], function (data) {
     // console.log('categories:', data);
   })
   .toJSONAPI();
