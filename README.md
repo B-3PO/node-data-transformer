@@ -1,23 +1,16 @@
-# node-data-transformer
+# node-sql-transformer
 **This project is in beta**
-A module to transform data form one format into json with flexible structures
+A module to transform data form sql into json or json-api
+The purpose of the module is to make transforming into multiple json structures both easy and performant.
 
-## Goals
-- make it fast
-- make it efficient
-- make it easy
-- make it flexible
-
-## Roadmap
-- Add support for other data sources. Here are some that we want to add
- - mysql (currently supported)
+# Roadmap
+- Allow for transformer to communicate with multiple types of sql
+ - mysql: current default
  - Athena
- - S3
- - csv files
- - json files
- 
+
 - Allow for transformer to output to multiple formats
- - json (supported)
- - json-api (supported)
+ - json: available
+ - json-api: available
+ - csv
 
 - Add ability for custom transformation on the field level
