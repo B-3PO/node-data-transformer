@@ -54,12 +54,13 @@ describe('resource-manger', function () {
     });
 
     it('should not throw with correct config', function () {
-      mysqlmock.expects('createPool').once();
+      mysqlmock.expects('createConnection').once();
       databaseManager.add({
         host: 'localhost',
         user: 'ben',
         database: 'test'
       });
+      databaseManager.query('');
       mysqlmock.verify();
       mysqlmock.restore();
     });

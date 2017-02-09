@@ -8,14 +8,11 @@ chai.use(sinonChai);
 
 describe('resource-manger', function () {
   var structManager;
-  var revertGetData;
+  var resourceRevert;
 
   beforeEach(function () {
     structManager = rewire('../lib/struct-manager');
-    revertGetData = structManager.__set__('getData', function () {}); // stub getData
-  });
-  afterEach(function () {
-    revertGetData();
+    resourceRevert = structManager.__set__('resourceManager', require('../lib/resource-manager'));
   });
 
   describe('define', function () {
@@ -58,21 +55,6 @@ describe('resource-manger', function () {
       expect(get).to.throw(Error);
       expect(console.error).to.be.called;
       stubbedConsoleError.restore();
-    });
-
-    it('should get the same item if get is called more than once', function () {
-      structManager.__get__('resourceManager').define('one', {
-        fields: {
-          id: {dataType: 'id'},
-          name: {dataType: 'string'}
-        }
-      });
-      var structure = structManager.define({
-        id: 'one.id',
-        name: 'one.name'
-      });
-      var one = structure.get();
-      expect(structure.get()).to.equal(one);
     });
   });
 });
