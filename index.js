@@ -17,14 +17,12 @@ module.exports = {
   addDatabase: addDatabase,
 
   // data types
-  STRING: 'string',
-  NUMBER: 'number',
-  INT: 'int',
-  ID: 'id',
-  UUID: 'uuid',
   BOOLEAN: 'boolean',
-  JSON: 'json',
-  JSON_API: 'jsonapi'
+  ID: 'id',
+  INT: 'int',
+  NUMBER: 'number',
+  STRING: 'string',
+  UUID: 'uuid'
 };
 
 

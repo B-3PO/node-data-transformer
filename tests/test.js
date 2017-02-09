@@ -11,8 +11,8 @@ transformer.addDatabase({
 transformer.defineResource('locations', {
   fields: {
     id: {dataType: transformer.ID},
-    name: {dataTpe: transformer.STRING},
-    description: {dataTpe: transformer.STRING},
+    name: {dataType: transformer.STRING},
+    description: {dataType: transformer.STRING},
     venue_id: {dataType: transformer.INT}
   },
 
@@ -95,7 +95,7 @@ transformer.defineResource('menu_items', {
     id: {dataType: transformer.ID},
     item_id: {dataType: transformer.INT},
     menu_id: {dataType: transformer.INT},
-    name: {dataTpe: transformer.STRING},
+    name: {dataType: transformer.STRING},
     price: {dataType: transformer.NUMBER}
   },
 
@@ -132,7 +132,7 @@ transformer.defineResource('item_variants', {
 transformer.defineResource('addon_groups_items', {
   fields: {
     id: {dataType: transformer.ID},
-    name: {dataTpe: transformer.STRING}
+    name: {dataType: transformer.STRING}
   },
 
   relationships: [
@@ -179,7 +179,7 @@ transformer.defineResource('addon_groups_addons', {
 transformer.defineResource('addons', {
   fields: {
     id: {dataType: transformer.ID},
-    name: {dataTpe: transformer.STRING}
+    name: {dataType: transformer.STRING}
   },
 
   relationships: [
@@ -231,13 +231,30 @@ var locationStruct = transformer.defineStruct({
 
 var start = clock();
 
-
 locationStruct
-  .get([320, 1])
-  .menus([100, 264])
-  // .regroup()
+  .get(['320', '1'])
+  .filter(function (data) {
+    return true;
+  })
   .toJSONAPI(function (data) {
-    console.log(data.data);
+    // console.log(data.data[0].relationships.menus);
+  })
+  // .menus([100, 264], function (data) {
+  //   // console.log(data.data)
+  // })
+  .menus()
+  .filter({
+    id: function (value) {
+      return value === '264' || value === '100';
+    }
+  })
+  // .menus()
+  // .filter(function (data) {
+  //   return true;
+  // })
+  .toJSONAPI(function (data) {
+    console.log(data.data[0].attributes)
+    console.log(data.data[0].relationships.menus);
   });
 
 // locationStruct
