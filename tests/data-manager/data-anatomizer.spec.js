@@ -1,33 +1,28 @@
 'use strict';
+
+var dataMaker = require('../helpers/data-maker');
 var chai = require('chai');
 var expect = chai.expect;
 var rewire = require("rewire");
 var sinonChai = require('sinon-chai');
 var sinon = require('sinon');
+var util = require('util');
 chai.use(sinonChai);
 
 describe('data-types', function () {
   var dataSlicer;
   var dataAnatomizer;
-  var structManager;
-  var resourceManager;
-  var resourceRevert;
-  var revertDataManager;
   var attrs;
   var rows;
   var anatomizer;
 
   beforeEach(function () {
     dataSlicer = rewire('../../lib/data-manager/data-slicer');
-    structManager = rewire('../../lib/struct-manager');
-    revertDataManager = structManager.__set__('dataManager', function () {});
-    resourceManager = rewire('../../lib/resource-manager');
-    resourceRevert = structManager.__set__('resourceManager', resourceManager);
-    rows = gertQueryData();
-    attrs = getAttrs();
+    rows = dataMaker.gertQueryData();
+    attrs = dataMaker.getAttrs();
     dataAnatomizer = rewire('../../lib/data-manager/data-anatomizer');
 
-    var struct = getStruct();
+    var struct = dataMaker.getStruct();
     var slices = dataSlicer(rows, attrs, struct);
     var promise = Promise.resolve({
       root: slices[struct.$$resource.type].$$arr,
@@ -37,174 +32,74 @@ describe('data-types', function () {
     anatomizer = dataAnatomizer(struct, promise, arguments[arguments.length-1]);
   });
   afterEach(function() {
-    resourceRevert();
-    revertDataManager();
+    dataMaker.reset();
   });
 
   it('should return json object', function (done) {
     anatomizer.toJSON(function (data) {
+      expect(data).to.deep.equal(dataMaker.getResultJSON());
+      done();
+    });
+  });
+
+
+  it('should return json api object', function (done) {
+    anatomizer.toJSONAPI(function (data) {
+      expect(data).to.deep.equal(dataMaker.getResultJSONAPI());
+      done();
+    });
+  });
+
+  it('should return filtered object', function (done) {
+    anatomizer.filter({
+      id: function (value) {
+        return value === '2'
+      }
+    }).toJSON(function (data) {
       expect(data).to.deep.equal([
         { name: 'two', id: '2', items: [{
-            id: '3',
-            name: 'bacon',
-            modefiers: [{
-              id: '2',
-              name: 'more bacon'
-            }]
-          }]
-        },
-        { name: 'one', id: '1', items: [
-            {
-              name: "toast",
-              id: "2",
-              modefiers: []
-            },
-            {
-              name: "bagel",
-              id: "1",
-              modefiers: [{
-                name: "cream cheese",
-                id: "1"
-              }]
-            }
-          ]
-        }
+            id: '3', name: 'bacon',
+            modefiers: [{ id: '2',   name: 'more bacon' }]
+          }] }
       ]);
       done();
     });
   });
 
-  function getStruct() {
-    resourceManager.define('menus', {
-      fields: {
-        id: {dataType: 'id'},
-        name: {dataType: 'string'}
-      },
-      relationships: [
-        'items.id'
-      ]
-    });
-    resourceManager.define('items', {
-      fields: {
-        id: {dataType: 'id'},
-        name: {dataType: 'string'}
-      },
-      relationships: [
-        'modefiers.id'
-      ]
-    });
-    resourceManager.define('modefiers', {
-      fields: {
-        id: {dataType: 'id'},
-        name: {dataType: 'string'}
-      }
-    });
-    var struct = structManager.define({
-      id: 'menus.id',
-      name: 'menus.name',
-      items: structManager.define({
-        id: 'items.id',
-        name: 'items.name',
-        modefiers: structManager.define({
-          id: 'modefiers.id',
-          name: 'modefiers.name'
-        })
+  it('should return filtered object ids', function (done) {
+    anatomizer
+      .filter({
+        id: function (value) {
+          return value === '1'
+        }
       })
-    });
-    struct.get([]);
-    return struct;
-  }
+      .items(['2'])
+      .toJSON(function (data) {
+        expect(data).to.deep.equal([
+          { name: 'one', id: '1', items: [
+              { name: "toast", id: "2", modefiers: [] }
+            ] } ]);
+        done();
+      });
+  });
 
 
-
-  function gertQueryData() {
-    return [
-      {
-        '0_menus_id': '1',
-        '1_menus_name': 'one',
-        '2_items_id': '1',
-        '3_items_name': 'bagel',
-        '4_modefiers_id': null,
-        '5_modefiers_name': null
-      },
-      {
-        '0_menus_id': '1',
-        '1_menus_name': 'one',
-        '2_items_id': '1',
-        '3_items_name': 'bagel',
-        '4_modefiers_id': '1',
-        '5_modefiers_name': 'cream cheese'
-      },
-      {
-        '0_menus_id': '1',
-        '1_menus_name': 'one',
-        '2_items_id': '2',
-        '3_items_name': 'toast',
-        '4_modefiers_id': null,
-        '5_modefiers_name': null
-      },
-      {
-        '0_menus_id': '2',
-        '1_menus_name': 'two',
-        '2_items_id': '3',
-        '3_items_name': 'bacon',
-        '4_modefiers_id': '2',
-        '5_modefiers_name': 'more bacon'
-      }
-    ];
-  }
-
-  function getAttrs() {
-    return  {
-      'menus_id': {
-        id: 0,
-        table: 'menus',
-        field: 'id',
-        alias: '0_menus_id',
-        config: 'menus',
-        dataType: 'id'
-      },
-      'menus_name': {
-        id: 1,
-        table: 'menus',
-        field: 'name',
-        alias: '1_menus_name',
-        config: 'menus',
-        dataType: 'string'
-      },
-      'items_id': {
-        id: 2,
-        table: 'items',
-        field: 'id',
-        alias: '2_items_id',
-        config: 'items',
-        dataType: 'id'
-      },
-      'items_name': {
-        id: 3,
-        table: 'items',
-        field: 'name',
-        alias: '3_items_name',
-        config: 'items',
-        dataType: 'string'
-      },
-      'modefiers_id': {
-        id: 4,
-        table: 'modefiers',
-        field: 'id',
-        alias: '4_modefiers_id',
-        config: 'modefiers',
-        dataType: 'id'
-      },
-      'modefiers_name': {
-        id: 5,
-        table: 'modefiers',
-        field: 'name',
-        alias: '5_modefiers_name',
-        config: 'modefiers',
-        dataType: 'string'
-      }
-    };
-  }
+  it('should return filtered object 2', function (done) {
+    anatomizer
+      .filter({
+        id: function (value) {
+          return value === '2'
+        }
+      })
+      .items()
+      .filter(function (data) {
+        data.id !== '3'
+      })
+      .toJSON(function (data) {
+        expect(data).to.deep.equal([
+          { name: 'two', id: '2', items: [] } ]);
+        done();
+      });
+  });
 
 });
