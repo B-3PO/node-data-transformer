@@ -1,10 +1,18 @@
+var util = require('util');
+var fs = require('fs');
 var transformer = require('../index');
+// transformer.addDatabase({
+//   host: '127.0.0.1',
+//   user: 'root',
+//   database: 'bypass',
+//   connectionLimit: 10,
+//   default: true
+// });
 transformer.addDatabase({
-  host: '127.0.0.1',
-  user: 'root',
-  database: 'bypass',
-  connectionLimit: 10,
-  default: true
+  host: 'menu-transformation.cd6beaqpt0ll.us-east-1.rds.amazonaws.com',
+  user: 'brubin',
+  password: 'sR5J8qWLkd436',
+  database: 'menu-transform'
 });
 
 
