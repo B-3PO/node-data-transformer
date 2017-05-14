@@ -1,20 +1,13 @@
 var util = require('util');
 var fs = require('fs');
 var transformer = require('../index');
-// transformer.addDatabase({
-//   host: '127.0.0.1',
-//   user: 'root',
-//   database: 'bypass',
-//   connectionLimit: 10,
-//   default: true
-// });
 transformer.addDatabase({
-  host: 'menu-transformation.cd6beaqpt0ll.us-east-1.rds.amazonaws.com',
-  user: 'brubin',
-  password: 'sR5J8qWLkd436',
-  database: 'menu-transform'
+  host: '127.0.0.1',
+  user: 'root',
+  database: 'bypass',
+  connectionLimit: 10,
+  default: true
 });
-
 
 transformer.defineResource('locations', {
   fields: {
@@ -354,47 +347,80 @@ var locationStruct = transformer.defineStruct({
 
 
 
-// var start = clock();
+// locationStruct.menus.get([1185, 432])
+//   .filter()
+//   .categories(function () {
+//
+//   })
+//   .squash()
+//   .categories()
+//   .root()
+//   .categories()
+//   .toJSONAPI()
+
+
 locationStruct
   .menus
-  .get('7475')
-  .categories()
-  .items(function (items) {
-    items.forEach(function (item) {
-      item.disabled = false;
-      item.catalog = null;
-      item.image_url = '';
-      item.option_types = [];
-      item.parts = [];
-      item.plu = null;
-      item.sides = [];
-      item.sku = null;
-      item.toppings = [];
-      item.upc = null;
-      item.upsales = [];
-      item.variants = [];
-      item.weight = null;
-      item.tax_rate = '0.0825';
-    });
-  })
-  .modifiers(function (mods) {
-    mods.forEach(function (item) {
-      item.additional_price = null;
-      item.limit_selection_to = null;
-      item.require_selection = null;
-      item.type = 'multi_selection';
-    });
+  .get('432')
+  // .toJSON(function (data) {
+  //   console.log('1 ----------', util.inspect(data, false, 2));
+  // })
+  // .root('categories')
+  // .wrap(function (data) {
+  //   return {
+  //     categories: data
+  //   };
+  // })
+  .filter('categories', function (item) {
+    // console.log(item)
+    return item.id === 442;
   })
   .toJSON(function (data) {
-    // console.log(util.inspect(data, false, null));
-    // console.log(util.inspect(data[0].categories[0].items[0], false, null));
-    fs.writeFile('/Users/benrubin/Desktop/7475.json', '{ "categories": '+JSON.stringify(data[0].categories) + ', "meta":{"incorporated_menu_ids": [7575]}}', function (err, data) {
-      if (err) {
-        return console.log(err);
-      }
-      console.log('wrote it');
-    });
+    console.log(util.inspect(data[0], false, 2));
   });
+
+
+// var start = clock();
+// locationStruct
+//   .menus
+//   .get('432')
+//   .categories()
+//   .items(function (items) {
+//     items.forEach(function (item) {
+//       item.disabled = false;
+//       item.catalog = null;
+//       item.image_url = '';
+//       item.option_types = [];
+//       item.parts = [];
+//       item.plu = null;
+//       item.sides = [];
+//       item.sku = null;
+//       item.toppings = [];
+//       item.upc = null;
+//       item.upsales = [];
+//       item.variants = [];
+//       item.weight = null;
+//       item.tax_rate = '0.0825';
+//     });
+//   })
+//   .modifiers(function (mods) {
+//     mods.forEach(function (item) {
+//       item.additional_price = null;
+//       item.limit_selection_to = null;
+//       item.require_selection = null;
+//       item.type = 'multi_selection';
+//     });
+//   })
+//   .toJSON(function (data) {
+//     console.log(util.inspect(data, false, null));
+//     // console.log(util.inspect(data[0].categories[0].items[0], false, null));
+//     // fs.writeFile('/Users/benrubin/Desktop/7475.json', '{ "categories": '+JSON.stringify(data[0].categories) + ', "meta":{"incorporated_menu_ids": [7575]}}', function (err, data) {
+//     //   if (err) {
+//     //     return console.log(err);
+//     //   }
+//     //   console.log('wrote it');
+//     // });
+//   });
 
 
 // locationStruct
