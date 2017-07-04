@@ -1,8 +1,8 @@
-'use strict';
 
-var resourceManager = require('./lib/resource-manager');
-var structManager = require('./lib/struct-manager');
-var database = require('./lib/database');
+
+const resourceManager = require('./lib/resource-manager');
+const structManager = require('./lib/struct-manager');
+const database = require('./lib/database');
 
 
 /**
@@ -14,7 +14,7 @@ var database = require('./lib/database');
 module.exports = {
   defineResource: resourceManager.define,
   defineStruct: structManager.define,
-  addDatabase: addDatabase,
+  addDatabase,
 
   // data types
   BOOLEAN: 'boolean',
@@ -22,7 +22,7 @@ module.exports = {
   INT: 'int',
   NUMBER: 'number',
   STRING: 'string',
-  UUID: 'uuid'
+  UUID: 'uuid',
 };
 
 

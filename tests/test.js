@@ -340,7 +340,7 @@ var locationStruct = transformer.defineStruct({
           rate: 'tax_rates.rate',
           receipt_label: 'tax_rates.receipt_label'
         })
-      }),
+      })
     })
   })
 });
