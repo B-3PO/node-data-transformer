@@ -17,7 +17,8 @@ transformer.defineResource('venues', {
 
   relationships: [
     'menus.venue_id',
-    'menu_items.venue_id'
+    'menu_items.venue_id',
+    'items.venue_id'
   ]
 });
 
@@ -67,10 +68,16 @@ transformer.defineResource('items', {
   fields: {
     id: {dataType: transformer.ID},
     name: {dataType: transformer.STRING},
+    base_price: {dataType: transformer.NUMBER},
+    archived: {dataType: transformer.BOOLEAN}
   },
 
   relationships: [
-    'menu_items.item_id'
+    'menu_items.item_id',
+    {
+      resource: 'venues.id',
+      field: 'venue_id'
+    }
   ]
 });
 
@@ -92,20 +99,24 @@ var struct = transformer.defineStruct({
   }),
 
 
-  venue_menu_items: transformer.defineStruct({
-    id: 'menu_items.id',
+  venue_items: transformer.defineStruct({
+    id: 'items.id',
     name: 'items.name',
-    price: 'menu_items.price'
+    price: 'items.base_price'
   })
 });
 
 
 struct
-  .get('86')
+  .filter('items', {
+    archived: false
+  })
+  .get('1')
   // .root('menu_items')
   .toJSONAPI(function (data) {
-    // console.log(data.included.length);
+    // console.log(data.included.length)
+    console.log(data.included.length);
     // console.log(data.data[0].relationships.venue_menu_items.data.length);
     // console.log(data.data[0].relationships.menus.data.length);
-    // console.log(util.inspect(data.data[0], false, 2));
+    // console.log(util.inspect(data, false, 2));
   });
